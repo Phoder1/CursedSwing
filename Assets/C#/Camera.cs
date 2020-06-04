@@ -20,8 +20,8 @@ public class Camera : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        camTrans.transform.localRotation = Quaternion.Euler(xRotOffSet, 90f, 0f);
-        camTrans.transform.localPosition = new Vector3(DistanceFromPlayer, CamHeight, 0f);
+        camTrans.transform.localRotation = Quaternion.Euler(xRotOffSet, 0f, 0f);
+        camTrans.transform.localPosition = new Vector3(0f, CamHeight, DistanceFromPlayer);
     }
 
     // Update is called once per frame

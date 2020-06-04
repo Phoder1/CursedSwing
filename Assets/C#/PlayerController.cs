@@ -6,7 +6,7 @@ using MoveTools;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField]
-    Camera mainCamera;
+    Transform mainCamera;
     [SerializeField]
     float Speed;
     [SerializeField]
@@ -31,13 +31,13 @@ public class PlayerController : MonoBehaviour
     void Update() {
         moveX.UpdateVelocity(Input.GetAxis("Horizontal") * Speed);
         moveZ.UpdateVelocity(Input.GetAxis("Vertical") * Speed);
-        moveX.SetPosition(Vector3.right);
-        moveZ.SetPosition(transform.position - mainCamera.transform.position);
+        moveX.SetPosition(mainCamera.right);
+        moveZ.SetPosition(mainCamera.forward);
 
         
         Debug.Log(Input.mousePosition);
 
-        float playerAngle = (transform.rotation.eulerAngles.y > 180f ? -1 : 1) * Vector3.Angle(Vector3.forward, transform.forward);
+        float playerAngle = (transform.localRotation.eulerAngles.y > 180f ? -1 : 1) * Vector3.Angle(Vector3.forward, transform.forward);
         float mouseAngle = Mathf.Sign(Input.mousePosition.x - Screen.width/2) * Vector2.Angle(Vector2.up, (Vector2)Input.mousePosition - new Vector2(Screen.width / 2,Screen.height/2));
         rotationAngle = Mathf.Clamp(Mathf.DeltaAngle(playerAngle, mouseAngle), -MAX_ANGLE_ROTATION* Time.deltaTime, MAX_ANGLE_ROTATION * Time.deltaTime);
 
@@ -45,7 +45,7 @@ public class PlayerController : MonoBehaviour
         //Rotation angle math
 
 
-        Debug.Log("position: " + transform.position + " ,mouse position: " + mousePosition + " ,Mouse angle: " + mouseAngle +" ,Player angle: " + playerAngle + " ,Angle delta: "+ rotationAngle);
+        //Debug.Log("position: " + transform.position + " ,mouse position: " + mousePosition + " ,Mouse angle: " + mouseAngle +" ,Player angle: " + playerAngle + " ,Angle delta: "+ rotationAngle);
         transform.Rotate(Vector3.up * rotationAngle);
 
         //cameraTransform.position = new Vector3(transform.position.x,transform.position.y,cameraTransform.position.z);
