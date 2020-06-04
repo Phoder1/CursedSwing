@@ -37,7 +37,7 @@ public class PlayerController : MonoBehaviour
 
         float playerAngle = (transform.rotation.eulerAngles.y > 180f ? -1 : 1) * Vector3.Angle(Vector3.forward, transform.forward);
         float mouseAngle = Mathf.Sign(Input.mousePosition.x - Screen.width/2) * Vector2.Angle(Vector2.up, (Vector2)Input.mousePosition - new Vector2(Screen.width / 2,Screen.height/2));
-        rotationAngle = Mathf.Clamp(Mathf.DeltaAngle(mouseAngle, playerAngle), -MAX_ANGLE_ROTATION* Time.deltaTime, MAX_ANGLE_ROTATION * Time.deltaTime);
+        rotationAngle = Mathf.Clamp(Mathf.DeltaAngle(playerAngle, mouseAngle), -MAX_ANGLE_ROTATION* Time.deltaTime, MAX_ANGLE_ROTATION * Time.deltaTime);
 
 
         //Rotation angle math
