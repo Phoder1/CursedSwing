@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     MoveDimension moveX;
     [SerializeField]
-    MoveDimension moveY;
+    MoveDimension moveZ;
     public static float rotationAngle;
     const float MAX_ANGLE_ROTATION = 360f;
     Vector3 mousePosition;
@@ -27,10 +27,10 @@ public class PlayerController : MonoBehaviour
 
     // Update is called once per frame
     void Update() {
-        /*moveX.UpdateVelocity(Input.GetAxis("Horizontal") * Speed);
-        moveY.UpdateVelocity(Input.GetAxis("Vertical") * Speed);
-        moveX.SetPosition(Vector2.right);
-        moveY.SetPosition(Vector2.up);*/
+        moveX.UpdateVelocity(Input.GetAxis("Horizontal") * Speed);
+        moveZ.UpdateVelocity(Input.GetAxis("Vertical") * Speed);
+        moveX.SetPosition(Vector3.right);
+        moveZ.SetPosition(Vector3.forward);
 
         
         Debug.Log(Input.mousePosition);
