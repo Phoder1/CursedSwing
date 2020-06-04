@@ -6,6 +6,8 @@ using MoveTools;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField]
+    Camera mainCamera;
+    [SerializeField]
     float Speed;
     [SerializeField]
     MoveDimension moveX;
@@ -30,7 +32,7 @@ public class PlayerController : MonoBehaviour
         moveX.UpdateVelocity(Input.GetAxis("Horizontal") * Speed);
         moveZ.UpdateVelocity(Input.GetAxis("Vertical") * Speed);
         moveX.SetPosition(Vector3.right);
-        moveZ.SetPosition(Vector3.forward);
+        moveZ.SetPosition(transform.position - mainCamera.transform.position);
 
         
         Debug.Log(Input.mousePosition);
