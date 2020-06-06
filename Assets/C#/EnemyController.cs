@@ -10,6 +10,7 @@ public class EnemyController : MonoBehaviour
     float impulseForce;
     [SerializeField]
     float maxImpulseForce = 1.5f;
+    bool moveForward;
 
 
     //State Machine
