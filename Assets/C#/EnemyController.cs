@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.Animations;
 
 public class EnemyController : MonoBehaviour
 {
@@ -30,7 +29,7 @@ public class EnemyController : MonoBehaviour
     //AI stuff
     private NavMeshAgent agent;
     private Transform playerPos;
-
+    private Vector3 nextPos;
     //probabaly awake cuz its gonna be instantiated in the near future, most def
     private void Awake()
     {
@@ -64,7 +63,7 @@ public class EnemyController : MonoBehaviour
     //Amir's shitty ass patrol loop
     public void Patrol()
     {
-        Vector3 nextPos;
+        nextPos = PatrolPositions[patrolIndex].position;
         if (Vector3.Distance(transform.position, PatrolPositions[patrolIndex].position) < 5f)
         {
             patrolIndex++;
@@ -73,16 +72,19 @@ public class EnemyController : MonoBehaviour
         {
             patrolIndex = 0;
         }
-        nextPos = PatrolPositions[patrolIndex].position;
         GoHere(nextPos);
     }
     public void FollowTarget()
     {
         Vector3 target;
         RaycastHit hit;
-        if (Physics.Raycast(playerPos.position, Vector3.down, out hit, 20f) && hit.point != null)
+        if (Physics.Raycast(playerPos.position, Vector3.down, out hit, 20f))
         {
             target = hit.point;
+        }
+        else
+        {
+            target = playerPos.position;
         }
         GoHere(target);
     }
