@@ -19,7 +19,8 @@ public class EnemyController : MonoBehaviour
     public bool canAttack;
     public bool isAlive;
 
-    private bool moveForward;
+    private Transform firstPatrolPos;
+    private Transform SecondPatrolPos;
     public float moveSpeed;
     private Vector3 originalPos;
 
