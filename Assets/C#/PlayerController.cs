@@ -21,13 +21,9 @@ public class PlayerController : MonoBehaviour
 
 
 
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
-        
     }
-
-    // Update is called once per frame
     void Update() {
         moveX.UpdateVelocity(Input.GetAxis("Horizontal") * Speed);
         moveZ.UpdateVelocity(Input.GetAxis("Vertical") * Speed);
@@ -54,9 +50,5 @@ public class PlayerController : MonoBehaviour
         //speedY = Input.GetAxis("Vertical") * Time.deltaTime * Speed;
 
         //transform.position += Vector3.up; 
-        
-
-
-
     }
 }
