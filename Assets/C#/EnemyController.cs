@@ -76,16 +76,11 @@ public class EnemyController : MonoBehaviour
     }
     public void FollowTarget()
     {
+        bool hitNavMesh;
         Vector3 target;
         RaycastHit hit;
-        if (Physics.Raycast(playerPos.position, Vector3.down, out hit, 20f))
-        {
-            target = hit.point;
-        }
-        else
-        {
-            target = playerPos.position;
-        }
+        hitNavMesh = Physics.Raycast(playerPos.position, Vector3.down, out hit, 20f, NavMesh.AllAreas);
+        target = hit.point;
         GoHere(target);
     }
     public void Attacking()
