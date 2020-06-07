@@ -298,55 +298,15 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy
       objectReference: {fileID: 0}
-    - target: {fileID: 4534105084326348732, guid: 8d7dee6845ce171438906e293c2a9ee5,
+    - target: {fileID: 4534105084438490220, guid: 8d7dee6845ce171438906e293c2a9ee5,
         type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 4.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4534105084326348732, guid: 8d7dee6845ce171438906e293c2a9ee5,
+      propertyPath: swordCollider
+      value: 
+      objectReference: {fileID: 394045182}
+    - target: {fileID: 4910581102770846374, guid: 8d7dee6845ce171438906e293c2a9ee5,
         type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 7.72
-      objectReference: {fileID: 0}
-    - target: {fileID: 4534105084438490222, guid: 8d7dee6845ce171438906e293c2a9ee5,
-        type: 3}
-      propertyPath: m_StoppingDistance
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4534105084438490222, guid: 8d7dee6845ce171438906e293c2a9ee5,
-        type: 3}
-      propertyPath: m_AutoBraking
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4534105084438490222, guid: 8d7dee6845ce171438906e293c2a9ee5,
-        type: 3}
-      propertyPath: m_AngularSpeed
-      value: 200
-      objectReference: {fileID: 0}
-    - target: {fileID: 4534105084438490227, guid: 8d7dee6845ce171438906e293c2a9ee5,
-        type: 3}
-      propertyPath: m_Enabled
+      propertyPath: m_IsTrigger
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4534105084716226498, guid: 8d7dee6845ce171438906e293c2a9ee5,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 2.0699997
-      objectReference: {fileID: 0}
-    - target: {fileID: 4534105084716226498, guid: 8d7dee6845ce171438906e293c2a9ee5,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 14.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4534105085692906019, guid: 8d7dee6845ce171438906e293c2a9ee5,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 2.37
-      objectReference: {fileID: 0}
-    - target: {fileID: 4534105085692906019, guid: 8d7dee6845ce171438906e293c2a9ee5,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -9.4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8d7dee6845ce171438906e293c2a9ee5, type: 3}
@@ -495,6 +455,12 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 0, z: 0}
   m_TimeToStationary: 0.5
+--- !u!65 &394045182 stripped
+BoxCollider:
+  m_CorrespondingSourceObject: {fileID: 2111049222290234047, guid: b425084afd13ca34a8dc87b743cc3bd1,
+    type: 3}
+  m_PrefabInstance: {fileID: 3808820548205836993}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &434342101
 GameObject:
   m_ObjectHideFlags: 0
@@ -2445,5 +2411,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 2111049222290234047, guid: b425084afd13ca34a8dc87b743cc3bd1,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2136705247742017670, guid: b425084afd13ca34a8dc87b743cc3bd1,
+        type: 3}
+      propertyPath: m_TagString
+      value: Weapon
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 7964324623519534857, guid: b425084afd13ca34a8dc87b743cc3bd1, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: b425084afd13ca34a8dc87b743cc3bd1, type: 3}

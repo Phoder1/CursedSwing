@@ -53,6 +53,9 @@ public class EnemyController : MonoBehaviour
     private NavMeshAgent agent;
     private Transform playerPos;
     private Vector3 nextPos;
+
+    [SerializeField]
+    Collider swordCollider;
     //probabaly awake cuz its gonna be instantiated in the near future, most def
     private void Awake()
     {
@@ -61,6 +64,7 @@ public class EnemyController : MonoBehaviour
         isAlive = true;
         agent = GetComponent<NavMeshAgent>();
         playerPos = GameObject.FindGameObjectWithTag("Player").transform;
+        //swordCollider = GameObject.FindGameObjectWithTag("Weapon").GetComponent<Collider>();
         rb = GetComponent<Rigidbody>();
     }
 
@@ -77,7 +81,7 @@ public class EnemyController : MonoBehaviour
 
         if (lastState != currentState)
         {
-            Debug.Log("Switched state! to: " + currentState.ToString() + " ,from: " + lastState.ToString());
+            //Debug.Log("Switched state! to: " + currentState.ToString() + " ,from: " + lastState.ToString());
             lastState = currentState;
             switch (currentState)
             {
@@ -161,17 +165,28 @@ public class EnemyController : MonoBehaviour
                 break;
         }
 
-        Debug.Log("State: " + currentState.ToString());
+        //Debug.Log("State: " + currentState.ToString());
     }
 
+
+    //collisionForce = PlayerController.rotationAngle;
+    //impulseForce = Mathf.Clamp(Mathf.Abs(collisionForce) * Time.deltaTime * forceAmount, 0f, maxImpulseForce);
+    //rb.AddForce((transform.position - collision.transform.position) * impulseForce, ForceMode.Impulse);
 
     //When Hit with anything, instances are set in collision matrix
-    private void OnTriggerEnter(Collider collision)
-    {
-        collisionForce = PlayerController.rotationAngle;
-        impulseForce = Mathf.Clamp(Mathf.Abs(collisionForce) * Time.deltaTime * forceAmount, 0f, maxImpulseForce);
-        rb.AddForce((transform.position - collision.transform.position) * impulseForce, ForceMode.Impulse);
+
+    private void OnCollisionEnter(Collision collision) {
+        Debug.Log("Collision!");
+        ContactPoint[] contacts = new ContactPoint[collision.contactCount];
+        for (int i = 0; i < collision.contactCount; i++) {
+            
+            if (contacts[i].thisCollider == swordCollider) {
+                Debug.Log("Found sword!");
+            }
+
+        }
     }
+
     //Agent Target destination
     private void GoHere(Vector3 target)
     {
