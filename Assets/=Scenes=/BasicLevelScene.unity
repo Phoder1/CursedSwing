@@ -311,12 +311,22 @@ PrefabInstance:
     - target: {fileID: 4534105084438490222, guid: 8d7dee6845ce171438906e293c2a9ee5,
         type: 3}
       propertyPath: m_StoppingDistance
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4534105084438490222, guid: 8d7dee6845ce171438906e293c2a9ee5,
         type: 3}
       propertyPath: m_AutoBraking
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4534105084438490222, guid: 8d7dee6845ce171438906e293c2a9ee5,
+        type: 3}
+      propertyPath: m_AngularSpeed
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 4534105084438490227, guid: 8d7dee6845ce171438906e293c2a9ee5,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4534105084716226498, guid: 8d7dee6845ce171438906e293c2a9ee5,
         type: 3}

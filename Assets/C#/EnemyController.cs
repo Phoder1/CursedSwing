@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyController : MonoBehaviour
-{
+public class EnemyController : MonoBehaviour {
+
+    enum EnemyStates { Patroling, Following, Attacking, Stunned, Death, None }
     //Rb Hit Force calculations mostly (go to onCollision methods for implementation)
     Rigidbody rb;
     float collisionForce;
@@ -14,11 +15,30 @@ public class EnemyController : MonoBehaviour
 
 
     //State Machine
-    Animator animator;
+    EnemyStates currentState = EnemyStates.Patroling;
+    EnemyStates lastState = EnemyStates.None;
+    
+
+    //Patrol variables
     [SerializeField]
     private Transform[] PatrolPositions;
+
     private int patrolIndex;
-    private float DistanceFromPlayer;
+
+    //Follow variables
+    [SerializeField]
+    float FOLLOW_UPDATE_INTERVAL = 0.7f;
+    [SerializeField]
+    float PLAYER_DETECTION_DISTANCE = 15f;
+
+    float timerSinceFollow;
+
+    //Attacking variables
+    const float PLAYER_ATTACK_RANGE = 3f;
+
+
+
+    private float distanceFromPlayer;
 
     private bool canAttack;
     private bool isAlive;
@@ -31,10 +51,8 @@ public class EnemyController : MonoBehaviour
     private Transform playerPos;
     private Vector3 nextPos;
     //probabaly awake cuz its gonna be instantiated in the near future, most def
-    private void Awake()
-    {
+    private void Awake() {
         patrolIndex = 0;
-        animator = GetComponent<Animator>();
         canAttack = true;
         isAlive = true;
         agent = GetComponent<NavMeshAgent>();
@@ -42,12 +60,114 @@ public class EnemyController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
     }
 
+    private void Update() {
+        distanceFromPlayer = Vector3.Distance(transform.position, playerPos.position);
+        StateMachine();
+    }
+
+
+    private void StateMachine() {
+        //Global case end check
+        if (distanceFromPlayer <= PLAYER_ATTACK_RANGE) {
+            currentState = EnemyStates.Attacking;
+        }
+        else if (distanceFromPlayer <= PLAYER_DETECTION_DISTANCE) {
+            currentState = EnemyStates.Following;
+        }
+        else {
+            currentState = EnemyStates.Patroling;
+        }
+
+
+        if (lastState != currentState) {
+            Debug.Log("Switched state! to: " + currentState.ToString() + " ,from: " + lastState.ToString());
+                lastState = currentState;
+            switch (currentState) {
+                case EnemyStates.Patroling:
+                    //Enter state action
+
+
+
+
+                    break;
+                case EnemyStates.Following:
+                    //Enter state action
+                    FollowTarget();
+                    timerSinceFollow = Time.timeSinceLevelLoad;
+
+
+
+                    break;
+                case EnemyStates.Attacking:
+                    //Enter state action
+
+
+
+
+                    break;
+                case EnemyStates.Stunned:
+                    //Enter state action
+
+
+
+
+                    break;
+            }
+        }
+
+
+
+
+
+        switch (currentState) {
+            case EnemyStates.Patroling:
+                //Case Update
+                Patrol();
+
+
+                //Case end condition checking
+
+
+                break;
+            case EnemyStates.Following:
+                //Case Update
+                if (Time.timeSinceLevelLoad - timerSinceFollow >= FOLLOW_UPDATE_INTERVAL) {
+                    FollowTarget();
+                    timerSinceFollow = Time.timeSinceLevelLoad;
+                }
+
+
+                //Case end condition checking
+
+
+                break;
+            case EnemyStates.Attacking:
+                //Case Update
+                Attacking();
+
+
+                //Case end condition checking
+
+
+                break;
+            case EnemyStates.Stunned:
+                //Case Update
+
+
+
+                //Case end condition checking
+
+
+                break;
+        }
+
+        Debug.Log("State: " + currentState.ToString());
+    }
+
 
     //When Hit with anything, instances are set in collision matrix
-    private void OnTriggerEnter(Collider collision)
-    {
-        if (collision.transform.CompareTag("Player"))
-        {
+    private void OnTriggerEnter(Collider collision) {
+        if (collision.transform.CompareTag("Player")) {
             Stunned();
         }
         collisionForce = PlayerController.rotationAngle;
@@ -56,26 +176,21 @@ public class EnemyController : MonoBehaviour
         //Debug.Log("NITROOOOOO : " + (transform.position - collision.transform.position));
     }
     //Agent Target destination
-    private void GoHere(Vector3 target)
-    {
+    private void GoHere(Vector3 target) {
         agent.SetDestination(target);
     }
     //Amir's shitty ass patrol loop
-    public void Patrol()
-    {
+    public void Patrol() {
         nextPos = PatrolPositions[patrolIndex].position;
-        if (Vector3.Distance(transform.position, PatrolPositions[patrolIndex].position) < 5f)
-        {
+        if (Vector3.Distance(transform.position, PatrolPositions[patrolIndex].position) < 5f) {
             patrolIndex++;
         }
-        if (patrolIndex > PatrolPositions.Length - 1)
-        {
+        if (patrolIndex > PatrolPositions.Length - 1) {
             patrolIndex = 0;
         }
         GoHere(nextPos);
     }
-    public void FollowTarget()
-    {
+    public void FollowTarget() {
         bool hitNavMesh;
         Vector3 target;
         RaycastHit hit;
@@ -83,21 +198,21 @@ public class EnemyController : MonoBehaviour
         target = hit.point;
         GoHere(target);
     }
-    public void Attacking()
-    {
+    public void Attacking() {
 
     }
-    public void Stunned()
-    {
+    public void Stunned() {
 
     }
-    public void Death()
-    {
+    public void Death() {
 
     }
-    private void Update()
-    {
-        DistanceFromPlayer = Vector3.Distance(transform.position, playerPos.position);
-        animator.SetFloat("DistanceFromPlayer", DistanceFromPlayer);
+
+
+    private void OnDrawGizmos() {
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(transform.position, PLAYER_DETECTION_DISTANCE);
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, PLAYER_ATTACK_RANGE);
     }
 }
