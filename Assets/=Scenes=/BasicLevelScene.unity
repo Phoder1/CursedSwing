@@ -303,6 +303,21 @@ PrefabInstance:
       propertyPath: swordCollider
       value: 
       objectReference: {fileID: 394045182}
+    - target: {fileID: 4534105084438490225, guid: 8d7dee6845ce171438906e293c2a9ee5,
+        type: 3}
+      propertyPath: m_IsKinematic
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4534105084438490225, guid: 8d7dee6845ce171438906e293c2a9ee5,
+        type: 3}
+      propertyPath: m_UseGravity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4534105084438490225, guid: 8d7dee6845ce171438906e293c2a9ee5,
+        type: 3}
+      propertyPath: m_Constraints
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4910581102770846374, guid: 8d7dee6845ce171438906e293c2a9ee5,
         type: 3}
       propertyPath: m_IsTrigger
@@ -2421,6 +2436,26 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Weapon
       objectReference: {fileID: 0}
+    - target: {fileID: 7964324623519534853, guid: b425084afd13ca34a8dc87b743cc3bd1,
+        type: 3}
+      propertyPath: m_Constraints
+      value: 126
+      objectReference: {fileID: 0}
+    - target: {fileID: 7964324623519534853, guid: b425084afd13ca34a8dc87b743cc3bd1,
+        type: 3}
+      propertyPath: m_Interpolate
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7964324623519534853, guid: b425084afd13ca34a8dc87b743cc3bd1,
+        type: 3}
+      propertyPath: m_CollisionDetection
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7964324623519534853, guid: b425084afd13ca34a8dc87b743cc3bd1,
+        type: 3}
+      propertyPath: m_IsKinematic
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents:
-    - {fileID: 7964324623519534857, guid: b425084afd13ca34a8dc87b743cc3bd1, type: 3}
+    - {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: b425084afd13ca34a8dc87b743cc3bd1, type: 3}

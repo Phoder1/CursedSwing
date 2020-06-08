@@ -1,5 +1,7 @@
-﻿using UnityEngine;
+﻿using System.Net.Http.Headers;
+using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UIElements;
 
 public class EnemyController : MonoBehaviour
 {
@@ -120,8 +122,6 @@ public class EnemyController : MonoBehaviour
 
 
 
-
-
         switch (currentState)
         {
             case EnemyStates.Patroling:
@@ -174,19 +174,20 @@ public class EnemyController : MonoBehaviour
     //rb.AddForce((transform.position - collision.transform.position) * impulseForce, ForceMode.Impulse);
 
     //When Hit with anything, instances are set in collision matrix
-
-    private void OnCollisionEnter(Collision collision) {
-        Debug.Log("Collision!");
-        ContactPoint[] contacts = new ContactPoint[collision.contactCount];
-        for (int i = 0; i < collision.contactCount; i++) {
-            
-            if (contacts[i].thisCollider == swordCollider) {
-                Debug.Log("Found sword!");
-            }
-
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "Player")
+        {
+        Debug.Log("ayylmao");
+            //disable kinematic
+            //disable navmesh control
+        }
+        else
+        {
+            //enable kinematic
+            //enable navmesh control
         }
     }
-
     //Agent Target destination
     private void GoHere(Vector3 target)
     {
@@ -227,8 +228,6 @@ public class EnemyController : MonoBehaviour
     {
 
     }
-
-
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.blue;
