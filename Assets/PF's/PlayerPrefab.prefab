@@ -212,9 +212,6 @@ MonoBehaviour:
   cameraRotSpeed: 4
   playerTrans: {fileID: 2646600700457828651}
   camTrans: {fileID: 66689843219148387}
-  xRotOffSet: 35
-  DistanceFromPlayer: -12
-  CamHeight: 10
 --- !u!1 &197736435475276102
 GameObject:
   m_ObjectHideFlags: 0
@@ -2084,7 +2081,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2646600700457828648}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.5329456, y: -7.609, z: -10.0495405}
+  m_LocalPosition: {x: 1.5329456, y: 0, z: -10.0495405}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 7964324622324379304}
@@ -2123,7 +2120,7 @@ MonoBehaviour:
   shieldAnim: {fileID: 7964324623052771707}
   moveSpeed: 10
   swordAcceleration: 10
-  drag: 0
+  drag: 0.001
   moveX:
     maxVelocity: 10
   moveZ:
