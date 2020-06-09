@@ -2638,5 +2638,10 @@ PrefabInstance:
       propertyPath: distanceFromPlayer
       value: 20
       objectReference: {fileID: 0}
+    - target: {fileID: 66689844141100605, guid: b425084afd13ca34a8dc87b743cc3bd1,
+        type: 3}
+      propertyPath: cameraRotOffset
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b425084afd13ca34a8dc87b743cc3bd1, type: 3}
