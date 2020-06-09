@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using DG.Tweening;
+using DG.Tweening.Core;
+using UnityEngine;
 public class Camera : MonoBehaviour
 {
     public float cameraRotSpeed;
@@ -18,7 +20,7 @@ public class Camera : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         camTrans.transform.localPosition = (Quaternion.Euler(rotFromPlayer, 0f, 0f) * Vector3.back) * distanceFromPlayer;
 
@@ -29,7 +31,7 @@ public class Camera : MonoBehaviour
         transform.position = playerTrans.position;
         if (Input.GetMouseButton(2))
         {
-            transform.Rotate(0f, Input.GetAxis("Mouse X") * cameraRotSpeed * Time.deltaTime, 0f);
+            transform.Rotate(0f, Input.GetAxis("Mouse X") * cameraRotSpeed * Time.fixedUnscaledDeltaTime, 0f);
         }
 
     }

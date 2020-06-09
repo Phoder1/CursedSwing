@@ -1,11 +1,15 @@
 ﻿using UnityEngine;
 using UnityEngine.AI;
 using DG.Tweening;
+using UnityEngine.UI;
+using System.Threading;
 
 public class EnemyController : MonoBehaviour
 {
 
     enum EnemyStates { Patroling, Following, Attacking, Stunned, Death, None }
+    private float HP = 100f;
+    private Slider sliderRef;
     //Rb Hit Force calculations mostly (go to onCollision methods for implementation)
     Rigidbody rb;
     float collisionForce;
@@ -14,6 +18,8 @@ public class EnemyController : MonoBehaviour
     [SerializeField]
     float maxImpulseForce = 1.5f;
     bool moveForward;
+
+    public Transform GFXHeadTrans;
 
 
     //State Machine
@@ -26,10 +32,13 @@ public class EnemyController : MonoBehaviour
     private Transform[] PatrolPositions;
 
     private int patrolIndex;
+    private float timeSincePatrolled;
+    private float PatrolUpdateInterval;
+    private bool arrivedAtLocation;
 
     //Follow variables
     [SerializeField]
-    float FOLLOW_UPDATE_INTERVAL = 0.7f;
+    float FollowUpdateInterval = 0.7f;
     [SerializeField]
     float playerDetectionDistance = 20f;
     float DetectionDisIncris = 20f;
@@ -39,13 +48,13 @@ public class EnemyController : MonoBehaviour
     const float PLAYER_ATTACK_RANGE = 3f;
 
     //Stunned variables
-    float stunTime = 5f;
+    float StunUpdateInterval = 5f;
     float timerSinceStunned;
+    private int numberOfContactPoints;
 
     private float distanceFromPlayer;
 
     private bool canAttack;
-    private bool isAlive;
     [SerializeField]
     private float moveSpeed;
     [SerializeField]
@@ -62,11 +71,13 @@ public class EnemyController : MonoBehaviour
     {
         patrolIndex = 0;
         canAttack = true;
-        isAlive = true;
         agent = GetComponent<NavMeshAgent>();
         playerPos = GameObject.FindGameObjectWithTag("Player").transform;
         //swordCollider = GameObject.FindGameObjectWithTag("Weapon").GetComponent<Collider>();
         rb = GetComponent<Rigidbody>();
+        sliderRef = transform.parent.GetComponentInChildren<Slider>();
+        sliderRef.value = HP / 100;
+
     }
 
     private void Update()
@@ -79,6 +90,13 @@ public class EnemyController : MonoBehaviour
     private void StateMachine()
     {
         //Global case end check
+        if (HP <= 0)
+        {
+            BoxCollider boxCollider = GFXHeadTrans.GetComponent<BoxCollider>();
+            //started from the buttom now we here (enemyGFX => enemyGuy)
+            Destroy(this.transform.parent.gameObject);
+            return;
+        }
         
         if (lastState != currentState)
         {
@@ -88,7 +106,7 @@ public class EnemyController : MonoBehaviour
             {
                 case EnemyStates.Patroling:
                     //Enter state action
-
+                    timeSincePatrolled = Time.timeSinceLevelLoad;
 
 
 
@@ -126,7 +144,15 @@ public class EnemyController : MonoBehaviour
         {
             case EnemyStates.Patroling:
                 //Case Update
-                Patrol();
+                if (arrivedAtLocation)
+                {
+                    timerSinceFollow = Time.timeSinceLevelLoad;
+                }
+                if (Time.timeSinceLevelLoad - timeSincePatrolled >= PatrolUpdateInterval)
+                {
+                    arrivedAtLocation = false;
+                    Patrol();
+                }
                 //Case end condition checking
                 if (distanceFromPlayer <= playerDetectionDistance)
                 {
@@ -135,7 +161,7 @@ public class EnemyController : MonoBehaviour
                 break;
             case EnemyStates.Following:
                 //Case Update
-                if (Time.timeSinceLevelLoad - timerSinceFollow >= FOLLOW_UPDATE_INTERVAL)
+                if (Time.timeSinceLevelLoad - timerSinceFollow >= FollowUpdateInterval)
                 {
                     FollowTarget();
                     timerSinceFollow = Time.timeSinceLevelLoad;
@@ -150,16 +176,15 @@ public class EnemyController : MonoBehaviour
                 //Case Update
                 Attacking();
                 //Case end condition checking
-                currentState = EnemyStates.Patroling;
+                currentState = EnemyStates.Following;
 
                 break;
             case EnemyStates.Stunned:
                 //Case Update
 
-
                 //Case end condition checking
 
-                if (Time.timeSinceLevelLoad - timerSinceStunned >= stunTime)
+                if (Time.timeSinceLevelLoad - timerSinceStunned >= StunUpdateInterval)
                 {
                     rb.mass = 1;
                     rb.isKinematic = true;
@@ -186,6 +211,7 @@ public class EnemyController : MonoBehaviour
     //When Hit with anything, instances are set in collision matrix
     private void OnCollisionEnter(Collision collision)
     {
+        numberOfContactPoints = collision.contactCount;
         ContactPoint[] contacts = new ContactPoint[collision.contactCount];
         collision.GetContacts(contacts);
         for (int i = 0; i < collision.contactCount; i++) {
@@ -196,6 +222,7 @@ public class EnemyController : MonoBehaviour
                 rb.constraints = RigidbodyConstraints.None;
                 impulseForce = Mathf.Clamp(Mathf.Abs(PlayerController.rotationAngle) * forceAmount, 0f, maxImpulseForce);
                 rb.AddForce((transform.position - contacts[i].point) * impulseForce, ForceMode.Impulse);
+                
             }
         }
         //somehow recognizes the sword like this
@@ -214,13 +241,17 @@ public class EnemyController : MonoBehaviour
         nextPos = PatrolPositions[patrolIndex].position;
         if (Vector3.Distance(transform.position, PatrolPositions[patrolIndex].position) < 5f)
         {
+            arrivedAtLocation = true;
             patrolIndex++;
         }
         if (patrolIndex > PatrolPositions.Length - 1)
         {
             patrolIndex = 0;
         }
-        GoHere(nextPos);
+        if (!arrivedAtLocation)
+        {
+            GoHere(nextPos);
+        }
     }
     public void FollowTarget()
     {
@@ -237,12 +268,13 @@ public class EnemyController : MonoBehaviour
     }
     public void Stunned()
     {
-
+        
+        HP -= numberOfContactPoints * 10;
+        HP = Mathf.Clamp(HP, 0, 100);
+        sliderRef.value = HP / 100;
+        Debug.LogError(HP);
     }
-    public void Death()
-    {
-
-    }
+    internal bool IsDead { get => HP >= 0; }
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.blue;
