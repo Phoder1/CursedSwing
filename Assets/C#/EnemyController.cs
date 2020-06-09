@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.AI;
+using DG.Tweening;
 
 public class EnemyController : MonoBehaviour
 {
@@ -38,7 +39,7 @@ public class EnemyController : MonoBehaviour
     const float PLAYER_ATTACK_RANGE = 3f;
 
     //Stunned variables
-    float stunTime = .5f;
+    float stunTime = 5f;
     float timerSinceStunned;
 
     private float distanceFromPlayer;
@@ -111,8 +112,7 @@ public class EnemyController : MonoBehaviour
                 case EnemyStates.Stunned:
                     //Enter state action
                     Stunned();
-                    rb.isKinematic = false;
-                    agent.enabled = false;
+
                     timerSinceStunned = Time.timeSinceLevelLoad;
 
 
@@ -163,15 +163,21 @@ public class EnemyController : MonoBehaviour
                 {
                     rb.mass = 1;
                     rb.isKinematic = true;
-                    agent.enabled = true;
-                    currentState = EnemyStates.Patroling;
+                    //transform.position = new Vector3(transform.position.x, 0.5905833f, transform.position.z);
+                    transform.DORotate(new Vector3(0f, 0f, 0f), 1f).OnComplete(EnablePhysics);
+                    
+
                 }
                 break;
         }
 
         //Debug.Log("State: " + currentState.ToString());
     }
-
+    void EnablePhysics() {
+        agent.enabled = true;
+        rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+        currentState = EnemyStates.Patroling;
+    }
 
     //collisionForce = PlayerController.rotationAngle;
     //impulseForce = Mathf.Clamp(Mathf.Abs(collisionForce) * Time.deltaTime * forceAmount, 0f, maxImpulseForce);
@@ -180,14 +186,20 @@ public class EnemyController : MonoBehaviour
     //When Hit with anything, instances are set in collision matrix
     private void OnCollisionEnter(Collision collision)
     {
-        //somehow recognizes the sword like this
-        if (collision.collider.tag == "Weapon")
-        {
-            currentState = EnemyStates.Stunned;
-            collisionForce = PlayerController.rotationAngle;
-            impulseForce = Mathf.Clamp(Mathf.Abs(collisionForce) * forceAmount, 0f, maxImpulseForce);
-            rb.AddForce((transform.position - collision.transform.position) * impulseForce, ForceMode.Impulse);
+        ContactPoint[] contacts = new ContactPoint[collision.contactCount];
+        collision.GetContacts(contacts);
+        for (int i = 0; i < collision.contactCount; i++) {
+            if (contacts[i].otherCollider.CompareTag("Weapon")) {
+                currentState = EnemyStates.Stunned;
+                rb.isKinematic = false;
+                agent.enabled = false;
+                rb.constraints = RigidbodyConstraints.None;
+                impulseForce = Mathf.Clamp(Mathf.Abs(PlayerController.rotationAngle) * forceAmount, 0f, maxImpulseForce);
+                rb.AddForce((transform.position - contacts[i].point) * impulseForce, ForceMode.Impulse);
+            }
         }
+        //somehow recognizes the sword like this
+
     }
 
     //Agent Target destination
