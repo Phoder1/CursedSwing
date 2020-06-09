@@ -7,9 +7,9 @@ public class Camera : MonoBehaviour
 
     public Transform camTrans;
 
-    float xRotOffSet;
-    float zDistanceFromPlayer;
-    float camHeight;
+    public float xRotOffSet;
+    public float zDistanceFromPlayer;
+    public float camHeight;
 
 
     // Start is called before the first frame update
