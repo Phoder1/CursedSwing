@@ -38,8 +38,9 @@ public class EnemyController : MonoBehaviour
     const float PLAYER_ATTACK_RANGE = 3f;
 
     //Stunned variables
-    float stunTime = .5f;
+    float stunTime = 5f;
     float timerSinceStunned;
+
 
     private float distanceFromPlayer;
 
@@ -183,6 +184,7 @@ public class EnemyController : MonoBehaviour
         //somehow recognizes the sword like this
         if (collision.collider.tag == "Weapon")
         {
+            
             currentState = EnemyStates.Stunned;
             collisionForce = PlayerController.rotationAngle;
             impulseForce = Mathf.Clamp(Mathf.Abs(collisionForce) * forceAmount, 0f, maxImpulseForce);
