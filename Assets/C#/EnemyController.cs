@@ -1,7 +1,5 @@
-﻿using System.Net.Http.Headers;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.UIElements;
 
 public class EnemyController : MonoBehaviour
 {
@@ -80,10 +78,10 @@ public class EnemyController : MonoBehaviour
     private void StateMachine()
     {
         //Global case end check
-
+        
         if (lastState != currentState)
         {
-            //Debug.Log("Switched state! to: " + currentState.ToString() + " ,from: " + lastState.ToString());
+            Debug.Log("Switched state! to: " + currentState.ToString() + " ,from: " + lastState.ToString());
             lastState = currentState;
             switch (currentState)
             {
@@ -113,6 +111,8 @@ public class EnemyController : MonoBehaviour
                 case EnemyStates.Stunned:
                     //Enter state action
                     Stunned();
+                    rb.isKinematic = false;
+                    agent.enabled = false;
                     timerSinceStunned = Time.timeSinceLevelLoad;
 
 
@@ -158,8 +158,12 @@ public class EnemyController : MonoBehaviour
 
 
                 //Case end condition checking
+
                 if (Time.timeSinceLevelLoad - timerSinceStunned >= stunTime)
                 {
+                    rb.mass = 1;
+                    rb.isKinematic = true;
+                    agent.enabled = true;
                     currentState = EnemyStates.Patroling;
                 }
                 break;
@@ -176,19 +180,18 @@ public class EnemyController : MonoBehaviour
     //When Hit with anything, instances are set in collision matrix
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "Player")
+        //somehow recognizes the sword like this
+        if (collision.collider.tag == "Weapon")
         {
-        Debug.Log("ayylmao");
-            //disable kinematic
-            //disable navmesh control
-        }
-        else
-        {
-            //enable kinematic
-            //enable navmesh control
+            currentState = EnemyStates.Stunned;
+            collisionForce = PlayerController.rotationAngle;
+            impulseForce = Mathf.Clamp(Mathf.Abs(collisionForce) * forceAmount, 0f, maxImpulseForce);
+            rb.AddForce((transform.position - collision.transform.position) * impulseForce, ForceMode.Impulse);
         }
     }
+
     //Agent Target destination
+
     private void GoHere(Vector3 target)
     {
         agent.SetDestination(target);
