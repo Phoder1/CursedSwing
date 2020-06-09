@@ -109,9 +109,9 @@ NavMeshSettings:
     agentRadius: 0.5
     agentHeight: 2
     agentSlope: 45
-    agentClimb: 0.4
-    ledgeDropHeight: 0
-    maxJumpAcrossDistance: 0
+    agentClimb: 1
+    ledgeDropHeight: 5
+    maxJumpAcrossDistance: 5
     minRegionArea: 2
     manualCellSize: 0
     cellSize: 0.16666667
@@ -363,6 +363,11 @@ PrefabInstance:
       propertyPath: swordCollider
       value: 
       objectReference: {fileID: 394045182}
+    - target: {fileID: 4534105084438490220, guid: 8d7dee6845ce171438906e293c2a9ee5,
+        type: 3}
+      propertyPath: maxImpulseForce
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 4534105084438490222, guid: 8d7dee6845ce171438906e293c2a9ee5,
         type: 3}
       propertyPath: m_Enabled
@@ -2461,6 +2466,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 66689843219148384, guid: b425084afd13ca34a8dc87b743cc3bd1,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 66689843435518000, guid: b425084afd13ca34a8dc87b743cc3bd1,
         type: 3}
       propertyPath: m_Name
@@ -2545,6 +2555,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7964324622664227326, guid: b425084afd13ca34a8dc87b743cc3bd1,
+        type: 3}
+      propertyPath: moveSpeed
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7964324622664227326, guid: b425084afd13ca34a8dc87b743cc3bd1,
+        type: 3}
+      propertyPath: swordAcceleration
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 7964324623519534853, guid: b425084afd13ca34a8dc87b743cc3bd1,
         type: 3}

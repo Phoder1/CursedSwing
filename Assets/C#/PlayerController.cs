@@ -30,7 +30,11 @@ public class PlayerController : MonoBehaviour {
     [SerializeField]
     Animator shieldAnim;
     [SerializeField]
-    float Speed;
+    float moveSpeed;
+    [SerializeField]
+    float swordAcceleration;
+    [SerializeField]
+    float drag;
     [SerializeField]
     MoveDimension moveX;
     [SerializeField]
@@ -46,9 +50,11 @@ public class PlayerController : MonoBehaviour {
     bool isGrounded;
     CharacterController playerMoveController;
 
-    
+
     public static float rotationAngle;
+    float rotationalSpeed;
     const float MAX_ANGLE_ROTATION = 360f;
+    
 
 
 
@@ -58,11 +64,10 @@ public class PlayerController : MonoBehaviour {
     }
 
     // Update is called once per frame
-    void FixedUpdate() {
+    private void FixedUpdate() {
         UpdateMovement();
         UpdateRotation();
         CheckControlls();
-
     }
 
     private void CheckControlls() {
@@ -80,7 +85,12 @@ public class PlayerController : MonoBehaviour {
         float playerAngle = (transform.rotation.eulerAngles.y < 180f ? 1 : -1) * Vector3.Angle(Vector3.forward, transform.forward);
         float cameraAngle = (mainCamera.rotation.eulerAngles.y < 180f ? 1 : -1) * Vector3.Angle(Vector3.forward, mainCamera.forward);
         float mouseAngle = Mathf.Sign(Input.mousePosition.x - Screen.width / 2) * Vector2.Angle(Vector2.up, (Vector2)Input.mousePosition - new Vector2(Screen.width / 2, Screen.height / 2));
-        rotationAngle = Mathf.Clamp(Mathf.DeltaAngle(playerAngle, cameraAngle + mouseAngle), -MAX_ANGLE_ROTATION * Time.deltaTime, MAX_ANGLE_ROTATION * Time.deltaTime);
+        rotationalSpeed += Mathf.DeltaAngle(playerAngle, cameraAngle + mouseAngle) * swordAcceleration * Time.deltaTime;
+
+        rotationAngle = Mathf.Clamp(rotationalSpeed * Time.deltaTime, -MAX_ANGLE_ROTATION * Time.deltaTime, MAX_ANGLE_ROTATION * Time.deltaTime);
+        if (Mathf.Sign(Mathf.DeltaAngle(playerAngle, cameraAngle + mouseAngle)) != Mathf.Sign(rotationAngle)) {
+            rotationalSpeed *= Mathf.Pow(drag, Time.deltaTime);
+        }
         //Rotation angle math
 
 
@@ -89,8 +99,8 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void UpdateMovement() {
-        moveX.UpdateVelocity(Input.GetAxis("Horizontal") * Speed);
-        moveZ.UpdateVelocity(Input.GetAxis("Vertical") * Speed);
+        moveX.UpdateVelocity(Input.GetAxis("Horizontal") * moveSpeed);
+        moveZ.UpdateVelocity(Input.GetAxis("Vertical") * moveSpeed);
         moveX.SetPosition(mainCamera.right);
         moveZ.SetPosition(mainCamera.forward);
 
